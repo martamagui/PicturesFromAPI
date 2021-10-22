@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.fabtnSync.setOnClickListener{
+            binding.ivRandomDog.visibility = View.GONE
             makeApiRequest()
 
         }
@@ -37,16 +38,16 @@ class MainActivity : AppCompatActivity() {
 
         GlobalScope.launch(Dispatchers.IO){
             try {
+
                 val response = api.getRandomDog()
                 Log.d("Main","Size: ${response.fileSizeBytes}")
 
                 if(response.fileSizeBytes < 800_000){
                     withContext(Dispatchers.Main) {
+                        binding.fabtnSync.text = response.url
                         Glide.with(applicationContext).load(response.url).into(binding.ivRandomDog)
                         binding.ivRandomDog.visibility = View.VISIBLE
                     }
-                }else{
-                    makeApiRequest()
                 }
 
             }catch (e:Exception){
