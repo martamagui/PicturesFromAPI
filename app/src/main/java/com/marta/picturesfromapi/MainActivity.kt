@@ -1,13 +1,13 @@
-package com.marta.picturesfronapi
+package com.marta.picturesfromapi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
-import com.marta.picturesfronapi.apiStuff.APIRequest
-import com.marta.picturesfronapi.apiStuff.BASE_URL
-import com.marta.picturesfronapi.databinding.ActivityMainBinding
+import com.marta.picturesfromapi.apiStuff.APIRequest
+import com.marta.picturesfromapi.apiStuff.BASE_URL
+import com.marta.picturesfromapi.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -22,8 +22,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        makeApiRequest()
         binding.fabtnSync.setOnClickListener{
-            binding.ivRandomDog.visibility = View.GONE
+            binding.ivRandomCat.visibility = View.GONE
             makeApiRequest()
 
         }
@@ -38,15 +39,14 @@ class MainActivity : AppCompatActivity() {
 
         GlobalScope.launch(Dispatchers.IO){
             try {
-
                 val response = api.getRandomDog()
-                Log.d("Main","Size: ${response.fileSizeBytes}")
+                Log.d("Main","Id: ${response.id}")
 
-                if(response.fileSizeBytes < 800_000){
+                if(response.id < 800_000){
                     withContext(Dispatchers.Main) {
-                        binding.fabtnSync.text = response.url
-                        Glide.with(applicationContext).load(response.url).into(binding.ivRandomDog)
-                        binding.ivRandomDog.visibility = View.VISIBLE
+                        Glide.with(applicationContext).load(response.url).into(binding.ivRandomCat)
+                        binding.ivRandomCat.visibility = View.VISIBLE
+
                     }
                 }
 
